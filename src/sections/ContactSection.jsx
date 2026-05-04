@@ -10,7 +10,14 @@ export default function ContactSection() {
   const onSubmit = e => {
     e.preventDefault()
     setLoading(true)
-    setTimeout(() => { setLoading(false); setSent(true) }, 1400)
+    const text = encodeURIComponent(
+      `مرحباً، أود التواصل معكم.\n\nالاسم: ${form.name}\nالهاتف: ${form.phone}\nالرسالة: ${form.message}`
+    )
+    setTimeout(() => {
+      setLoading(false)
+      setSent(true)
+      window.open(`https://wa.me/201117819505?text=${text}`, '_blank', 'noopener,noreferrer')
+    }, 800)
   }
 
   return (

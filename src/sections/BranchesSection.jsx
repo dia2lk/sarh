@@ -7,6 +7,7 @@ const branches = [
     address: 'كورنيش النيل - برج الصفوة - الدور الأول - أعلى ديسباسيتو - بجوار هيئة الرقابة المالية',
     phone:   '01117819505',
     hours:   'الأحد - الخميس: 9:00 ص - 6:00 م',
+    mapUrl:  'https://www.google.com/maps/search/برج+الصفوة+كورنيش+النيل+بني+سويف+مصر',
   },
   {
     city:    'الجيزة',
@@ -14,6 +15,7 @@ const branches = [
     address: 'القرية الذكية - مبني نورث سايد - الدور الأول',
     phone:   '01035678474',
     hours:   'الأحد - الخميس: 9:00 ص - 6:00 م',
+    mapUrl:  'https://www.google.com/maps/search/القرية+الذكية+نورث+سايد+الجيزة+مصر',
   },
 ]
 
@@ -64,9 +66,14 @@ export default function BranchesSection() {
                   </div>
                 </div>
 
-                <button className="mt-5 w-full py-2.5 rounded-xl text-sm font-bold transition-all duration-300 border border-gold/30 text-gold hover:bg-gold hover:text-white">
+                <a
+                  href={b.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 w-full py-2.5 rounded-xl text-sm font-bold transition-all duration-300 border border-gold/30 text-gold hover:bg-gold hover:text-white flex items-center justify-center"
+                >
                   عرض على الخريطة
-                </button>
+                </a>
               </div>
             </div>
           ))}

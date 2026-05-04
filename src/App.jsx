@@ -1,10 +1,22 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect }   from 'react'
+import { useEffect } from 'react'
 import Navbar          from './components/layout/Navbar'
 import Footer          from './components/layout/Footer'
-import SEO             from './components/SEO'
-import SchemaLD        from './components/SchemaLD'
+import WhatsAppButton  from './components/WhatsAppButton'
 import Home            from './pages/Home'
+
+/* Lazy-loaded pages — split into separate JS chunks */
+const AboutPage   = lazy(() => import('./pages/AboutPage'))
+const ServicesPage = lazy(() => import('./pages/ServicesPage'))
+const ContactPage  = lazy(() => import('./pages/ContactPage'))
+const FAQPage      = lazy(() => import('./pages/FAQPage'))
+const SectorsPage  = lazy(() => import('./pages/SectorsPage'))
+const CasesPage    = lazy(() => import('./pages/CasesPage'))
+const ArticlesPage = lazy(() => import('./pages/ArticlesPage'))
+const AIPage       = lazy(() => import('./pages/AIPage'))
+const BookPage     = lazy(() => import('./pages/BookPage'))
+const NotFound     = lazy(() => import('./pages/NotFound'))
 
 function ScrollTop() {
   const { pathname } = useLocation()
@@ -12,84 +24,16 @@ function ScrollTop() {
   return null
 }
 
-/* Generic inner page — semantic article wrapper */
-function InnerPage({ title, description, canonical, schemaPage }) {
+function PageLoader() {
   return (
-    <>
-      <SEO title={title} description={description} canonical={canonical} />
-      <SchemaLD page={schemaPage || 'default'} />
-      <main>
-        <article className="min-h-screen flex items-center justify-center bg-gray-light">
-          <div className="text-center px-4">
-            <div className="text-6xl mb-4">⚖️</div>
-            <h1 className="text-3xl font-black text-navy mb-3">{title}</h1>
-            <p className="text-gray-text text-lg">هذه الصفحة قيد التطوير</p>
-          </div>
-        </article>
-      </main>
-    </>
+    <div className="min-h-screen flex items-center justify-center bg-gray-light">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 rounded-full border-4 border-gold border-t-transparent animate-spin" />
+        <p className="text-navy font-semibold text-sm">جاري التحميل...</p>
+      </div>
+    </div>
   )
 }
-
-const innerPages = [
-  {
-    path:      '/about',
-    title:     'من نحن — د. إسلام إبراهيم وفريق صرح',
-    desc:      'تعرف على فريق صرح للخدمات القانونية والمحاسبية. خبرة قانونية منذ 2004، فرعان في بني سويف والجيزة، براءات في قضايا دولية.',
-    canonical: '/about',
-  },
-  {
-    path:      '/services',
-    title:     'خدماتنا — تأسيس شركات، عقود، محاسبة، تمثيل قانوني',
-    desc:      'خدمات قانونية ومحاسبية متكاملة: تأسيس الشركات، صياغة العقود، الاستشارات الضريبية، التمثيل في القضايا المعقدة.',
-    canonical: '/services',
-  },
-  {
-    path:      '/sectors',
-    title:     'القطاعات — مصرفي، عقاري، صحي، صناعي وأكثر',
-    desc:      'صرح تخدم قطاعات متعددة: المصرفي، الحكومي، العقاري، الصحي، الصناعي، التعليمي، السياحي، والطاقة المتجددة.',
-    canonical: '/sectors',
-  },
-  {
-    path:      '/cases',
-    title:     'الإنجازات — براءات في قضايا تزوير، رشوة، واتجار بالبشر',
-    desc:      'قصص نجاح حقيقية: براءة في قضية تزوير بالكويت عبر الحسابات الرياضية، جناية رشوة، واتجار بالبشر عابر للحدود.',
-    canonical: '/cases',
-  },
-  {
-    path:      '/articles',
-    title:     'المقالات القانونية والمحاسبية',
-    desc:      'مقالات قانونية ومحاسبية متخصصة من فريق خبراء صرح حول الشركات، الضرائب، والقانون التجاري المصري.',
-    canonical: '/articles',
-  },
-  {
-    path:      '/faq',
-    title:     'الأسئلة الشائعة — صرح للخدمات القانونية',
-    desc:      'إجابات على أكثر الأسئلة شيوعاً حول كيفية التعامل مع صرح، أمان البيانات، التكلفة، والدعم المستمر للشركات.',
-    canonical: '/faq',
-    schema:    'faq',
-  },
-  {
-    path:      '/contact',
-    title:     'تواصل معنا — 01117819505 | بني سويف والجيزة',
-    desc:      'تواصل مع فريق صرح القانوني: 01117819505 أو 01035678474 أو info@sarh-law.com. فرعان في بني سويف والجيزة.',
-    canonical: '/contact',
-  },
-  {
-    path:      '/ai-consultation',
-    title:     'المستشار القانوني الذكي — إرشادات فورية بالذكاء الاصطناعي',
-    desc:      'احصل على إرشادات قانونية مبدئية فورية مجانية عبر مستشار صرح الذكي. متاح 24/7 لأسئلة الشركات والعقود والضرائب.',
-    canonical: '/ai-consultation',
-    schema:    'ai',
-  },
-  {
-    path:      '/book-consultation',
-    title:     'احجز استشارة مجانية — 30 دقيقة مع خبير قانوني',
-    desc:      'احجز استشارتك القانونية الأولى مجاناً مع فريق صرح المتخصص. تقييم وضعك القانوني وتحديد مسار العمل في 30 دقيقة.',
-    canonical: '/book-consultation',
-    noIndex:   true,
-  },
-]
 
 export default function App() {
   return (
@@ -99,29 +43,27 @@ export default function App() {
         <Navbar />
       </header>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {innerPages.map(p => (
-          <Route
-            key={p.path}
-            path={p.path}
-            element={
-              <InnerPage
-                title={p.title}
-                description={p.desc}
-                canonical={p.canonical}
-                schemaPage={p.schema}
-                noIndex={p.noIndex}
-              />
-            }
-          />
-        ))}
-        <Route path="*" element={<Home />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/"                  element={<Home />} />
+          <Route path="/about"             element={<AboutPage />} />
+          <Route path="/services"          element={<ServicesPage />} />
+          <Route path="/contact"           element={<ContactPage />} />
+          <Route path="/faq"               element={<FAQPage />} />
+          <Route path="/sectors"           element={<SectorsPage />} />
+          <Route path="/cases"             element={<CasesPage />} />
+          <Route path="/articles"          element={<ArticlesPage />} />
+          <Route path="/ai-consultation"   element={<AIPage />} />
+          <Route path="/book-consultation" element={<BookPage />} />
+          <Route path="*"                  element={<NotFound />} />
+        </Routes>
+      </Suspense>
 
       <footer role="contentinfo">
         <Footer />
       </footer>
+
+      <WhatsAppButton />
     </>
   )
 }

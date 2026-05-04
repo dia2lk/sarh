@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async'
 
 const SITE_URL  = 'https://sarh-law.com'
 const SITE_NAME = 'صرح للخدمات القانونية والمحاسبية'
-const DEFAULT_IMG = `${SITE_URL}/og-image.jpg`
+const DEFAULT_IMG = `${SITE_URL}/og-image.svg`
 
 /**
  * SEO component — injects <head> meta tags per page.

@@ -12,8 +12,6 @@ import FAQSection      from '../sections/FAQSection'
 import AISection       from '../sections/AISection'
 import BranchesSection from '../sections/BranchesSection'
 import ContactSection  from '../sections/ContactSection'
-import FooterCTA       from '../sections/FooterCTA'
-
 export default function Home() {
   return (
     <>
@@ -37,7 +35,6 @@ export default function Home() {
         <AISection />
         <BranchesSection />
         <ContactSection />
-        <FooterCTA />
       </main>
     </>
   )

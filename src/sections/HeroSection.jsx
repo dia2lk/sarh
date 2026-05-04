@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Award, ArrowLeft } from 'lucide-react'
+import { Award, ArrowLeft, Scale } from 'lucide-react'
 
 export default function HeroSection() {
   return (
@@ -69,22 +69,53 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Left: Stats */}
-          <div className="flex flex-col sm:flex-row lg:flex-col gap-5 lg:gap-6">
-            {[
-              { value: '+5,500', label: 'قضية ناجحة' },
-              { value: '+2,000', label: 'عميل يثق بنا' },
-              { value: '98%',    label: 'نسبة النجاح' },
-            ].map(s => (
-              <div
-                key={s.label}
-                className="flex-1 text-center rounded-2xl p-6 border"
-                style={{background:'rgba(255,255,255,0.05)', borderColor:'rgba(255,255,255,0.1)', backdropFilter:'blur(8px)'}}
-              >
-                <div className="text-4xl font-black text-gold mb-1">{s.value}</div>
-                <div className="text-gray-300 text-sm font-medium">{s.label}</div>
+          {/* Left: Orbit graphic */}
+          <div className="hidden lg:flex justify-center animate-fade-in">
+            <div className="relative">
+              {/* Outer circle */}
+              <div className="w-96 h-96 rounded-full flex items-center justify-center border border-gold/20"
+                style={{background:'linear-gradient(135deg, rgba(201,162,39,0.1), rgba(201,162,39,0.05))'}}>
+                {/* Middle circle */}
+                <div className="w-72 h-72 rounded-full flex items-center justify-center border border-gold/10"
+                  style={{background:'linear-gradient(135deg, rgba(201,162,39,0.1), transparent)'}}>
+                  {/* Inner circle */}
+                  <div className="w-48 h-48 rounded-full flex items-center justify-center"
+                    style={{background:'linear-gradient(135deg, rgba(201,162,39,0.2), rgba(201,162,39,0.05))'}}>
+                    <Scale className="w-20 h-20 text-gold" strokeWidth={1.5} />
+                  </div>
+                </div>
               </div>
-            ))}
+
+              {/* Floating card: top-right */}
+              <div className="absolute top-10 -right-4 rounded-xl p-4 border backdrop-blur-sm flex items-center gap-3 shadow-lg"
+                style={{background:'rgba(255,255,255,0.08)', borderColor:'rgba(255,255,255,0.15)'}}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                  style={{background:'rgba(201,162,39,0.2)'}}>
+                  <Scale className="w-4 h-4 text-gold" />
+                </div>
+                <span className="text-white text-sm font-semibold whitespace-nowrap">العقود الاستراتيجية</span>
+              </div>
+
+              {/* Floating card: left-center */}
+              <div className="absolute top-1/2 -left-8 -translate-y-1/2 rounded-xl p-4 border backdrop-blur-sm flex items-center gap-3 shadow-lg"
+                style={{background:'rgba(255,255,255,0.08)', borderColor:'rgba(255,255,255,0.15)'}}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                  style={{background:'rgba(201,162,39,0.2)'}}>
+                  <Award className="w-4 h-4 text-gold" />
+                </div>
+                <span className="text-white text-sm font-semibold whitespace-nowrap">التمثيل القانوني</span>
+              </div>
+
+              {/* Floating card: bottom-left */}
+              <div className="absolute bottom-10 -left-4 rounded-xl p-4 border backdrop-blur-sm flex items-center gap-3 shadow-lg"
+                style={{background:'rgba(255,255,255,0.08)', borderColor:'rgba(255,255,255,0.15)'}}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                  style={{background:'rgba(201,162,39,0.2)'}}>
+                  <Scale className="w-4 h-4 text-gold" />
+                </div>
+                <span className="text-white text-sm font-semibold whitespace-nowrap">حوكمة الأعمال</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

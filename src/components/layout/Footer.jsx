@@ -1,6 +1,39 @@
 import { Link } from 'react-router-dom'
 import { Scale, Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
 
+function FooterCTA() {
+  return (
+    <div style={{background:'linear-gradient(to left, #c9a227, #e2b93b)'}}>
+      <div className="max-w-7xl mx-auto px-6 py-14 text-center">
+        <h3 className="text-2xl md:text-3xl font-black text-white mb-4">
+          احجز استشارة الآن — ابدأ بحماية أعمالك اليوم
+        </h3>
+        <p className="text-white/80 mb-8 text-lg">
+          نقدم استشارة أولية مجانية لمدة 30 دقيقة لتقييم وضعكم القانوني وتحديد مسار العمل
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            to="/book-consultation"
+            className="bg-navy-dark text-white px-8 py-3.5 rounded-lg font-bold hover:bg-navy transition-all duration-300 hover:scale-105"
+          >
+            احجز استشارة مجانية
+          </Link>
+          <a
+            href="https://wa.me/201117819505"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white border transition-all duration-300 hover:bg-white/30"
+            style={{background:'rgba(255,255,255,0.2)', borderColor:'rgba(255,255,255,0.3)'}}
+          >
+            <MessageCircle className="w-5 h-5" />
+            واتساب
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const footerLinks = [
   { label: 'خدماتنا',                      to: '/services' },
   { label: 'تأسيس الشركات وحوكمة الأعمال', to: '/services' },
@@ -25,6 +58,7 @@ const quickLinks = [
 export default function Footer() {
   return (
     <footer className="bg-navy-dark text-gray-400">
+      <FooterCTA />
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
 
@@ -103,9 +137,9 @@ export default function Footer() {
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-600">
           <p>© {new Date().getFullYear()} صرح للخدمات القانونية والمحاسبية. جميع الحقوق محفوظة.</p>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-gold transition-colors">سياسة الخصوصية</a>
+            <a href="mailto:info@sarh-law.com" className="hover:text-gold transition-colors">سياسة الخصوصية</a>
             <span>|</span>
-            <a href="#" className="hover:text-gold transition-colors">الشروط والأحكام</a>
+            <a href="mailto:info@sarh-law.com" className="hover:text-gold transition-colors">الشروط والأحكام</a>
           </div>
         </div>
       </div>
