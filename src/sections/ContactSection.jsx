@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Phone, Mail, MessageCircle, Send, CheckCircle } from 'lucide-react'
+import { Phone, Mail, MessageCircle, Send, CheckCircle, Facebook } from 'lucide-react'
 
 export default function ContactSection() {
   const [sent,    setSent]    = useState(false)
@@ -52,7 +52,7 @@ export default function ContactSection() {
                 </div>
               </a>
 
-              <a href="mailto:info@sarh-law.com"
+              <a href="mailto:legalsarh@gmail.com"
                 className="flex items-center gap-4 rounded-xl p-5 border transition-colors hover:bg-white/10"
                 style={{background:'rgba(255,255,255,0.05)', borderColor:'rgba(255,255,255,0.05)'}}>
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0"
@@ -61,7 +61,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <div className="text-gray-400 text-xs mb-1">البريد الإلكتروني</div>
-                  <div className="text-white font-bold">info@sarh-law.com</div>
+                  <div className="text-white font-bold">legalsarh@gmail.com</div>
                 </div>
               </a>
 
@@ -75,6 +75,19 @@ export default function ContactSection() {
                 <div>
                   <div className="text-gray-400 text-xs mb-1">واتساب</div>
                   <div className="text-white font-bold">تواصل مباشرة عبر واتساب</div>
+                </div>
+              </a>
+
+              <a href="https://www.facebook.com/diab5566/" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-xl p-5 border transition-colors hover:bg-white/10"
+                style={{background:'rgba(255,255,255,0.05)', borderColor:'rgba(255,255,255,0.05)'}}>
+                <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0"
+                  style={{background:'rgba(201,162,39,0.1)'}}>
+                  <Facebook className="w-6 h-6 text-gold" />
+                </div>
+                <div>
+                  <div className="text-gray-400 text-xs mb-1">فيسبوك</div>
+                  <div className="text-white font-bold">صفحتنا على فيسبوك</div>
                 </div>
               </a>
             </div>

@@ -14,7 +14,7 @@ const legalServiceSchema = {
   logo:       `${SITE_URL}/logo.png`,
   image:      `${SITE_URL}/og-image.jpg`,
   telephone:  ['+201117819505', '+201035678474'],
-  email:      'info@sarh-law.com',
+  email:      'legalsarh@gmail.com',
   foundingDate: '2004',
   founder: {
     '@type': 'Person',

@@ -46,9 +46,9 @@ export default function Navbar() {
               <Phone className="w-3 h-3 text-gold" />
               01035678474
             </a>
-            <a href="mailto:info@sarh-law.com" className="flex items-center gap-1.5 hover:text-gold transition-colors">
+            <a href="mailto:legalsarh@gmail.com" className="flex items-center gap-1.5 hover:text-gold transition-colors">
               <Mail className="w-3 h-3 text-gold" />
-              info@sarh-law.com
+              legalsarh@gmail.com
             </a>
           </div>
           <div className="flex items-center gap-6 text-xs text-gray-400">

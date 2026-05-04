@@ -9,7 +9,7 @@ export default function ContactPage() {
     <>
       <SEO
         title="تواصل معنا — 01117819505 | بني سويف والجيزة"
-        description="تواصل مع فريق صرح القانوني: 01117819505 أو 01035678474 أو info@sarh-law.com. فرعان في بني سويف والجيزة."
+        description="تواصل مع فريق صرح القانوني: 01117819505 أو 01035678474 أو legalsarh@gmail.com. فرعان في بني سويف والجيزة."
         canonical="/contact"
       />
       <SchemaLD page="default" />

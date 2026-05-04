@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Scale, Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
+import { Scale, Phone, Mail, MapPin, MessageCircle, Facebook } from 'lucide-react'
 
 function FooterCTA() {
   return (
@@ -82,6 +82,11 @@ export default function Footer() {
                 style={{background:'rgba(255,255,255,0.08)'}}>
                 <MessageCircle className="w-4 h-4 text-white" />
               </a>
+              <a href="https://www.facebook.com/diab5566/" target="_blank" rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full flex items-center justify-center transition-colors hover:bg-gold"
+                style={{background:'rgba(255,255,255,0.08)'}}>
+                <Facebook className="w-4 h-4 text-white" />
+              </a>
             </div>
           </div>
 
@@ -124,7 +129,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm">
                 <Mail className="w-4 h-4 text-gold shrink-0" />
-                <a href="mailto:info@sarh-law.com" className="hover:text-gold">info@sarh-law.com</a>
+                <a href="mailto:legalsarh@gmail.com" className="hover:text-gold">legalsarh@gmail.com</a>
               </li>
               <li className="flex items-start gap-3 text-sm">
                 <MapPin className="w-4 h-4 text-gold shrink-0 mt-0.5" />
@@ -137,9 +142,9 @@ export default function Footer() {
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-600">
           <p>© {new Date().getFullYear()} صرح للخدمات القانونية والمحاسبية. جميع الحقوق محفوظة.</p>
           <div className="flex items-center gap-4">
-            <a href="mailto:info@sarh-law.com" className="hover:text-gold transition-colors">سياسة الخصوصية</a>
+            <a href="mailto:legalsarh@gmail.com" className="hover:text-gold transition-colors">سياسة الخصوصية</a>
             <span>|</span>
-            <a href="mailto:info@sarh-law.com" className="hover:text-gold transition-colors">الشروط والأحكام</a>
+            <a href="mailto:legalsarh@gmail.com" className="hover:text-gold transition-colors">الشروط والأحكام</a>
           </div>
         </div>
       </div>
