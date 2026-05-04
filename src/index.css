@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { direction: rtl; scroll-behavior: smooth; }
+  body { @apply font-arabic bg-white text-gray-800 antialiased; }
+}
+
+@layer utilities {
+  .bg-navy        { background-color: #0f172a; }
+  .bg-navy-dark   { background-color: #050810; }
+  .bg-navy-light  { background-color: #1e2d4a; }
+  .text-navy      { color: #0f172a; }
+  .text-navy-light{ color: #1e2d4a; }
+  .text-gold      { color: #c9a227; }
+  .bg-gold        { background-color: #c9a227; }
+  .bg-gold-light  { background-color: #e2b93b; }
+  .border-gold    { border-color: #c9a227; }
+  .from-navy      { --tw-gradient-from: #0f172a; }
+  .to-navy        { --tw-gradient-to: #0f172a; }
+  .from-navy-dark { --tw-gradient-from: #050810; }
+  .to-navy-light  { --tw-gradient-to: #1e2d4a; }
+  .from-gold      { --tw-gradient-from: #c9a227; }
+  .to-gold-light  { --tw-gradient-to: #e2b93b; }
+  .via-gold       { --tw-gradient-via: #c9a227; }
+  .bg-gray-light  { background-color: #f4f4f5; }
+  .text-gray-text { color: #6b7280; }
+}
+
+/* Background dot/grid pattern */
+.bg-pattern {
+  background-image: radial-gradient(circle, rgba(201,162,39,0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Hero overlay */
+.hero-overlay {
+  background: linear-gradient(135deg, rgba(5,8,16,0.6) 0%, rgba(15,23,42,0.3) 100%);
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #c9a227, #e2b93b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section divider */
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #c9a227, #e2b93b);
+  margin: 0 auto;
+  border-radius: 9999px;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: all 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* Gold border on hover */
+.gold-border-hover:hover {
+  border-color: rgba(201,162,39,0.5) !important;
+}
+
+/* Map placeholder */
+.map-placeholder {
+  background: linear-gradient(135deg, #1e2d4a 0%, #0f172a 100%);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f4f4f5; }
+::-webkit-scrollbar-thumb { background: #c9a227; border-radius: 999px; }
+
+/* WhatsApp button pulse */
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,162,39,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(201,162,39,0); }
+}
+.pulse-gold { animation: pulse-gold 2s infinite; }
+
+/* Animate fade up */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fadeInUp 0.7s ease-out forwards; }

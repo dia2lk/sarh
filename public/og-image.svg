@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f172a"/>
+  <!-- Pattern dots -->
+  <defs>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="14" cy="14" r="1" fill="rgba(201,162,39,0.15)"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <!-- Gold glow -->
+  <ellipse cx="900" cy="315" rx="300" ry="200" fill="rgba(201,162,39,0.06)"/>
+  <!-- Logo circle -->
+  <rect x="80" y="240" width="80" height="80" rx="16" fill="#1e2d4a"/>
+  <text x="120" y="295" font-family="Arial" font-size="36" fill="#c9a227" text-anchor="middle">⚖</text>
+  <!-- Title Arabic -->
+  <text x="1120" y="290" font-family="Arial, sans-serif" font-size="52" font-weight="900" fill="white" text-anchor="end" direction="rtl">صرح للخدمات القانونية والمحاسبية</text>
+  <text x="1120" y="350" font-family="Arial, sans-serif" font-size="28" fill="#c9a227" text-anchor="end" direction="rtl">محامون ومحاسبون قانونيون</text>
+  <!-- Divider -->
+  <rect x="80" y="380" width="120" height="4" rx="2" fill="#c9a227"/>
+  <!-- Description -->
+  <text x="1120" y="420" font-family="Arial, sans-serif" font-size="22" fill="#9ca3af" text-anchor="end" direction="rtl">منظومة قانونية ومحاسبية متكاملة — بني سويف والجيزة، مصر</text>
+  <!-- Stats -->
+  <text x="200" y="520" font-family="Arial" font-size="32" font-weight="900" fill="#c9a227" text-anchor="middle">+5,500</text>
+  <text x="200" y="555" font-family="Arial" font-size="16" fill="#6b7280" text-anchor="middle">قضية ناجحة</text>
+  <text x="460" y="520" font-family="Arial" font-size="32" font-weight="900" fill="#c9a227" text-anchor="middle">+2,000</text>
+  <text x="460" y="555" font-family="Arial" font-size="16" fill="#6b7280" text-anchor="middle">عميل يثق بنا</text>
+  <text x="700" y="520" font-family="Arial" font-size="32" font-weight="900" fill="#c9a227" text-anchor="middle">98%</text>
+  <text x="700" y="555" font-family="Arial" font-size="16" fill="#6b7280" text-anchor="middle">نسبة النجاح</text>
+</svg>
