@@ -1,0 +1,28 @@
+# ============================================
+# صرح للخدمات القانونية والمحاسبية
+# robots.txt — SEO Configuration
+# ============================================
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://app.sarh-law.com/sitemap.xml
+
+# Disallow admin/internal paths
+Disallow: /api/
+Disallow: /_internal/
+Disallow: /crm
+Disallow: /billing
+
+# Allow all public pages
+Allow: /
+Allow: /about
+Allow: /services
+Allow: /sectors
+Allow: /cases
+Allow: /articles
+Allow: /faq
+Allow: /contact
+Allow: /book-consultation
+Allow: /ai-consultation
