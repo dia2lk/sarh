@@ -4,90 +4,90 @@
 
   <!-- ============================================ -->
   <!-- صرح للخدمات القانونية والمحاسبية              -->
-  <!-- Sitemap — https://app.sarh-law.com           -->
+  <!-- Sitemap — https://sarh.onrender.com           -->
   <!-- ============================================ -->
 
   <!-- الرئيسية -->
   <url>
-    <loc>https://app.sarh-law.com/</loc>
+    <loc>https://sarh.onrender.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://app.sarh-law.com/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh.onrender.com/" />
   </url>
 
   <!-- من نحن -->
   <url>
-    <loc>https://app.sarh-law.com/about</loc>
+    <loc>https://sarh.onrender.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- خدماتنا -->
   <url>
-    <loc>https://app.sarh-law.com/services</loc>
+    <loc>https://sarh.onrender.com/services</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- القطاعات -->
   <url>
-    <loc>https://app.sarh-law.com/sectors</loc>
+    <loc>https://sarh.onrender.com/sectors</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- الإنجازات والقضايا -->
   <url>
-    <loc>https://app.sarh-law.com/cases</loc>
+    <loc>https://sarh.onrender.com/cases</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- المقالات القانونية -->
   <url>
-    <loc>https://app.sarh-law.com/articles</loc>
+    <loc>https://sarh.onrender.com/articles</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- الأسئلة الشائعة -->
   <url>
-    <loc>https://app.sarh-law.com/faq</loc>
+    <loc>https://sarh.onrender.com/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- تواصل معنا -->
   <url>
-    <loc>https://app.sarh-law.com/contact</loc>
+    <loc>https://sarh.onrender.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- احجز استشارة -->
   <url>
-    <loc>https://app.sarh-law.com/book-consultation</loc>
+    <loc>https://sarh.onrender.com/book-consultation</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- الاستشارة الذكية -->
   <url>
-    <loc>https://app.sarh-law.com/ai-consultation</loc>
+    <loc>https://sarh.onrender.com/ai-consultation</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- سياسة الخصوصية -->
   <url>
-    <loc>https://app.sarh-law.com/privacy</loc>
+    <loc>https://sarh.onrender.com/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <!-- الشروط والأحكام -->
   <url>
-    <loc>https://app.sarh-law.com/terms</loc>
+    <loc>https://sarh.onrender.com/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

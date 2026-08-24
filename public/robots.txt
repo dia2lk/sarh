@@ -7,7 +7,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://app.sarh-law.com/sitemap.xml
+Sitemap: https://sarh.onrender.com/sitemap.xml
 
 # Disallow admin/internal paths
 Disallow: /api/

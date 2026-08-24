@@ -60,7 +60,7 @@ const ROUTE_META: Record<string, { title: string; description: string }> = {
   },
 };
 
-const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://app.sarh-law.com';
+const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://sarh.onrender.com';
 
 /** Create-or-update a <meta> tag identified by name= or property= */
 function setMeta(attr: 'name' | 'property', key: string, content: string): void {
