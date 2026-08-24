@@ -1,25 +1,28 @@
-# robots.txt — صرح للخدمات القانونية والمحاسبية
-# https://sarh-law.com
+# ============================================
+# صرح للخدمات القانونية والمحاسبية
+# robots.txt — SEO Configuration
+# ============================================
 
 User-agent: *
 Allow: /
 
-# Block admin / internal paths
-Disallow: /admin
-Disallow: /admin/
+# Sitemap
+Sitemap: https://app.sarh-law.com/sitemap.xml
+
+# Disallow admin/internal paths
 Disallow: /api/
-Disallow: /_next/
-Disallow: /static/chunks/
+Disallow: /_internal/
+Disallow: /crm
+Disallow: /billing
 
-# Crawl-delay for heavy bots
-User-agent: AhrefsBot
-Crawl-delay: 10
-
-User-agent: SemrushBot
-Crawl-delay: 10
-
-User-agent: MJ12bot
-Disallow: /
-
-# Sitemap location
-Sitemap: https://sarh-law.com/sitemap.xml
+# Allow all public pages
+Allow: /
+Allow: /about
+Allow: /services
+Allow: /sectors
+Allow: /cases
+Allow: /articles
+Allow: /faq
+Allow: /contact
+Allow: /book-consultation
+Allow: /ai-consultation

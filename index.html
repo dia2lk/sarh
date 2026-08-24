@@ -2,18 +2,107 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="صرح للخدمات القانونية والمحاسبية - محامون ومحاسبون قانونيون معتمدون" />
-    <title>صرح | الخدمات القانونية والمحاسبية</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap&display=swap" rel="stylesheet" />
-    <link rel="dns-prefetch" href="https://wa.me" />
+    <meta name="description" content="صرح للخدمات القانونية والمحاسبية — محامون ومحاسبون قانونيون. حلول قانونية ومحاسبية متكاملة لحماية أعمالكم وتعزيز نموكم." />
+    <meta name="keywords" content="محاماة, استشارات قانونية, محاسبة, تأسيس شركات, عقود استراتيجية, جنايات اقتصادية, استشارات ضريبية, محامون ومحاسبون, صرح, بني سويف, الجيزة" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="صرح للخدمات القانونية والمحاسبية" />
     <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href="https://app.sarh-law.com" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="صرح للخدمات القانونية والمحاسبية — محامون ومحاسبون قانونيون" />
+    <meta property="og:description" content="حماية قانونية متكاملة لأعمالكم واستثماراتكم" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ar_EG" />
+    <meta property="og:url" content="https://app.sarh-law.com" />
+    <meta property="og:site_name" content="صرح للخدمات القانونية والمحاسبية" />
+    <meta property="article:publisher" content="https://www.facebook.com/profile.php?id=61563312433693" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="صرح للخدمات القانونية والمحاسبية" />
+    <meta name="twitter:description" content="محامون ومحاسبون قانونيون — حلول قانونية ومحاسبية متكاملة" />
+
+    <title>صرح للخدمات القانونية والمحاسبية | محامون ومحاسبون قانونيون</title>
+
+    <!-- Preconnect for fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LegalService",
+      "name": "صرح للخدمات القانونية والمحاسبية",
+      "alternateName": "Sarh Legal & Accounting Services",
+      "description": "محامون ومحاسبون قانونيون — حلول قانونية ومحاسبية متكاملة",
+      "url": "https://app.sarh-law.com",
+      "telephone": ["+201117819505", "+201035678474"],
+      "email": "legalsarh@gmail.com",
+      "address": [
+        {
+          "@type": "PostalAddress",
+          "streetAddress": "كورنيش النيل - برج الصفوة - الدور الأول",
+          "addressLocality": "بني سويف",
+          "addressCountry": "EG"
+        },
+        {
+          "@type": "PostalAddress",
+          "streetAddress": "القرية الذكية - مبني نورث سايد - الدور الأول",
+          "addressLocality": "الجيزة",
+          "addressCountry": "EG"
+        }
+      ],
+      "sameAs": ["https://www.facebook.com/profile.php?id=61563312433693"],
+      "priceRange": "$$",
+      "areaServed": "EG"
+    }
+    </script>
+
+    <!-- DataLayer Init -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        'gtm.start': new Date().getTime(),
+        event: 'gtm.js',
+        site_language: 'ar',
+        site_direction: 'rtl',
+        business_name: 'صرح للخدمات القانونية والمحاسبية',
+        platform: 'react_app'
+      });
+    </script>
+
+    <!-- Loading State CSS (shows before React mounts) -->
+    <style>
+      #root:empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: #0f172a;
+      }
+      #root:empty::after {
+        content: '⚖️ صرح';
+        font-family: 'Cairo', sans-serif;
+        font-size: 2rem;
+        color: #c29a56;
+        animation: loadPulse 1.5s ease-in-out infinite;
+      }
+      @keyframes loadPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+      * { font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+      body { direction: rtl; overflow-x: hidden; background: #ffffff; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

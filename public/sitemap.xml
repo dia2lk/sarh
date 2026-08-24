@@ -2,84 +2,94 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
+  <!-- ============================================ -->
+  <!-- صرح للخدمات القانونية والمحاسبية              -->
+  <!-- Sitemap — https://app.sarh-law.com           -->
+  <!-- ============================================ -->
+
+  <!-- الرئيسية -->
   <url>
-    <loc>https://sarh-law.com/</loc>
-    <lastmod>2025-05-03</lastmod>
+    <loc>https://app.sarh-law.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://app.sarh-law.com/" />
   </url>
 
+  <!-- من نحن -->
   <url>
-    <loc>https://sarh-law.com/about</loc>
-    <lastmod>2025-05-03</lastmod>
+    <loc>https://app.sarh-law.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/about"/>
   </url>
 
+  <!-- خدماتنا -->
   <url>
-    <loc>https://sarh-law.com/services</loc>
-    <lastmod>2025-05-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/services"/>
-  </url>
-
-  <url>
-    <loc>https://sarh-law.com/sectors</loc>
-    <lastmod>2025-05-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/sectors"/>
-  </url>
-
-  <url>
-    <loc>https://sarh-law.com/cases</loc>
-    <lastmod>2025-05-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/cases"/>
-  </url>
-
-  <url>
-    <loc>https://sarh-law.com/articles</loc>
-    <lastmod>2025-05-03</lastmod>
+    <loc>https://app.sarh-law.com/services</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/articles"/>
+    <priority>0.9</priority>
   </url>
 
+  <!-- القطاعات -->
   <url>
-    <loc>https://sarh-law.com/faq</loc>
-    <lastmod>2025-05-03</lastmod>
+    <loc>https://app.sarh-law.com/sectors</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- الإنجازات والقضايا -->
+  <url>
+    <loc>https://app.sarh-law.com/cases</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- المقالات القانونية -->
+  <url>
+    <loc>https://app.sarh-law.com/articles</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- الأسئلة الشائعة -->
+  <url>
+    <loc>https://app.sarh-law.com/faq</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/faq"/>
   </url>
 
+  <!-- تواصل معنا -->
   <url>
-    <loc>https://sarh-law.com/contact</loc>
-    <lastmod>2025-05-03</lastmod>
+    <loc>https://app.sarh-law.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/contact"/>
   </url>
 
+  <!-- احجز استشارة -->
   <url>
-    <loc>https://sarh-law.com/ai-consultation</loc>
-    <lastmod>2025-05-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/ai-consultation"/>
-  </url>
-
-  <url>
-    <loc>https://sarh-law.com/book-consultation</loc>
-    <lastmod>2025-05-03</lastmod>
+    <loc>https://app.sarh-law.com/book-consultation</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://sarh-law.com/book-consultation"/>
+  </url>
+
+  <!-- الاستشارة الذكية -->
+  <url>
+    <loc>https://app.sarh-law.com/ai-consultation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- سياسة الخصوصية -->
+  <url>
+    <loc>https://app.sarh-law.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- الشروط والأحكام -->
+  <url>
+    <loc>https://app.sarh-law.com/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 
 </urlset>
