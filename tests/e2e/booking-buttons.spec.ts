@@ -24,8 +24,13 @@ const VALID_PHONE = "01012345678";
 
 async function gotoBooking(page: Page) {
   await page.goto(BOOKING_URL);
-  await page.waitForLoadState("networkidle");
-  await expect(page.getByRole("heading", { name: "اختر نوع الاستشارة" })).toBeVisible();
+  // Gate on a web assertion rather than "networkidle": that state can stall
+  // for the full navigation timeout when a neighbouring spec saturates the
+  // machine (the chatbot suite makes un-mocked AI calls), which is what made
+  // the end-to-end case flake under parallel load.
+  await expect(
+    page.getByRole("heading", { name: "اختر نوع الاستشارة" }),
+  ).toBeVisible({ timeout: 15_000 });
 }
 
 /** Pick the first consultation-type card and advance to step 2. */
@@ -190,8 +195,12 @@ test.describe("Booking buttons — end to end", () => {
     await expect(page.locator('form button[type="submit"]')).toBeVisible();
 
     await fillStep2(page);
+    const leadWrite = page.waitForResponse("**/rest/v1/leads");
     await page.locator('form button[type="submit"]').click();
-    await expect(page.getByRole("heading", { name: "تم الحجز بنجاح!" })).toBeVisible();
+    await leadWrite;
+    await expect(
+      page.getByRole("heading", { name: "تم الحجز بنجاح!" }),
+    ).toBeVisible({ timeout: 15_000 });
 
     // sidebar quick-help links are untouched — still plain anchors, not <Button>
     await expect(page.locator('a[href="tel:01117819505"]').first()).toBeVisible();
