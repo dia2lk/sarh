@@ -35,3 +35,13 @@ yarn-error.log*
 # Misc
 *.tgz
 .npmrc
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Local AI environment settings
+.delegate/
+.scratch/
