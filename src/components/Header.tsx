@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Scale, Phone, Mail, MapPin, Clock, Bot, Sparkles, BarChart3, CreditCard } from 'lucide-react';
+import { Menu, X, Scale, Phone, Mail, MapPin, Clock, Moon, Bot, BarChart3, CreditCard } from 'lucide-react';
 import { trackNavClick, trackCTAClick, trackPhoneClick, trackEmailClick } from '../lib/analytics';
 
 const navLinks = [
@@ -140,28 +140,16 @@ export default function Header() {
               ))}
             </div>
 
-            {/* CTA Buttons */}
+            {/* Reference CTA */}
             <div className="hidden lg:flex items-center gap-3">
-              <Link
-                to="/crm"
-                onClick={() => trackCTAClick('لوحة التحكم', 'header_nav', '/crm')}
-                className="p-2.5 rounded-lg text-navy/40 hover:text-gold hover:bg-gold/5 transition-all"
-                title="لوحة تحكم المحامين"
-              >
-                <BarChart3 size={18} />
-              </Link>
-              <Link
-                to="/ai-consultation"
-                onClick={() => trackCTAClick('المستشار الذكي', 'header_nav', '/ai-consultation')}
-                className="flex items-center gap-2 px-4 py-2.5 border border-navy/20 rounded-lg text-navy text-sm font-semibold hover:bg-navy hover:text-white hover:border-navy transition-all duration-300 group"
-              >
-                <Sparkles size={14} className="text-gold group-hover:animate-pulse" />
-                <span>المستشار الذكي</span>
-              </Link>
+              <button type="button" className="flex items-center gap-2 border border-gray-200 px-4 py-2.5 text-sm font-semibold text-navy transition-colors hover:border-gold hover:text-gold" aria-label="تبديل المظهر">
+                <Moon size={16} />
+                <span>ليلي</span>
+              </button>
               <Link
                 to="/book-consultation"
                 onClick={handleBookCTA}
-                className="bg-gradient-to-l from-gold to-gold-light text-white px-7 py-2.5 rounded-lg font-bold text-sm hover:shadow-lg hover:shadow-gold/30 transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                className="bg-gold text-navy px-7 py-2.5 font-bold text-sm hover:bg-gold-light transition-colors flex items-center gap-2"
               >
                 <span>احجز استشارة</span>
               </Link>

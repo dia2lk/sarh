@@ -5,7 +5,6 @@ import Footer from './components/Footer.tsx';
 import WhatsAppButton from './components/WhatsAppButton.tsx';
 import FloatingChatbot from './components/FloatingChatbot.tsx';
 import Seo from './components/Seo.tsx';
-import MigrationNotice from './components/MigrationNotice.tsx';
 
 const Home = lazy(() => import('./pages/Home.tsx'));
 const About = lazy(() => import('./pages/About.tsx'));
@@ -109,7 +108,6 @@ function AppLayout() {
       <HashRedirect />
       <div className="min-h-screen bg-white text-gray-800" dir="rtl">
         <Header />
-        <MigrationNotice />
         <main>
           <Suspense
             fallback={

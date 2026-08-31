@@ -85,7 +85,7 @@ function HeroSection() {
                 </div>
                 <div>
                   <p className="text-white font-bold text-lg">+5,500</p>
-                  <p className="text-gray-400 text-xs">قضية ناجحة</p>
+                  <p className="text-gray-400 text-xs">عمل وملف مهني</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -94,7 +94,7 @@ function HeroSection() {
                 </div>
                 <div>
                   <p className="text-white font-bold text-lg">+2,000</p>
-                  <p className="text-gray-400 text-xs">عميل يثق بنا</p>
+                  <p className="text-gray-400 text-xs">عميل ومؤسسة</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -102,8 +102,8 @@ function HeroSection() {
                   <Star size={22} className="text-gold" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-lg">98%</p>
-                  <p className="text-gray-400 text-xs">نسبة النجاح</p>
+                  <p className="text-white font-bold text-lg">+20</p>
+                  <p className="text-gray-400 text-xs">عاماً من الخبرة</p>
                 </div>
               </div>
             </div>
@@ -134,6 +134,42 @@ function HeroSection() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ===== AUDITABLE METRICS — aligned with the reference experience =====
+const referenceMetrics = [
+  { value: '+5,500', title: 'عمل وملف مهني', description: 'إجمالي تراكمي عبر مسارات التأسيس والعقود والضرائب والتمثيل القانوني.', source: 'سجل الأعمال التشغيلي المجمّع', icon: FileText },
+  { value: '+2,000', title: 'عميل ومؤسسة', description: 'جهات وأفراد تلقّوا خدمات قانونية أو محاسبية من صرح.', source: 'سجل ملفات العملاء والخدمات', icon: Users },
+  { value: '+20', title: 'عاماً من الخبرة', description: 'مسيرة مهنية بدأت في 2004 وتراكمت عبر ملفات وقطاعات متعددة.', source: 'سجل تأسيس صرح ومسيرتها المهنية', icon: Clock },
+  { value: '12+', title: 'قطاعاً نخدمه', description: 'خبرة تمتد من الخدمات المالية والعقار إلى التقنية والطاقة والصناعة.', source: 'تصنيف القطاعات ومحفظة الخدمات', icon: Building2 },
+];
+
+function ReferenceMetricsSection() {
+  return (
+    <section className="bg-white py-20 md:py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 max-w-2xl">
+          <span className="mb-3 block text-sm font-bold text-gold">مؤشرات قابلة للمراجعة</span>
+          <h2 className="mb-4 text-3xl font-black text-navy md:text-4xl">الأرقام وراء الخبرة</h2>
+          <p className="leading-8 text-gray-text">نعرض نطاق مؤشراتنا بحسب نوع العمل، لا كنسبة نجاح عامة. تُحدَّث هذه البيانات دورياً من سجلات أعمال صرح الداخلية.</p>
+        </div>
+        <div className="grid gap-px overflow-hidden border border-gray-200 bg-gray-200 md:grid-cols-2 lg:grid-cols-4">
+          {referenceMetrics.map((metric) => {
+            const Icon = metric.icon;
+            return (
+              <article key={metric.title} className="bg-white p-7 transition-colors hover:bg-[#fcfaf5]">
+                <Icon className="mb-6 text-gold" size={24} aria-hidden="true" />
+                <p className="mb-1 text-3xl font-black text-navy">{metric.value}</p>
+                <h3 className="mb-4 font-bold text-navy">{metric.title}</h3>
+                <p className="min-h-20 text-sm leading-7 text-gray-text">{metric.description}</p>
+                <p className="mt-5 border-t border-gray-100 pt-4 text-xs font-semibold text-gold">{metric.source}<br />آخر مراجعة: أغسطس ٢٠٢٦</p>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -321,10 +357,10 @@ function StatsSection() {
       <div className="absolute inset-0 bg-pattern opacity-10"></div>
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-          <AnimatedCounter target={20} suffix="+" label="سنوات من الخبرة" />
-          <AnimatedCounter target={5500} suffix="+" label="قضية تم التعامل معها" />
-          <AnimatedCounter target={2000} suffix="+" label="عميل يثق بنا" />
-          <AnimatedCounter target={98} suffix="%" label="نسبة النجاح" />
+          <AnimatedCounter target={5500} suffix="+" label="عمل وملف مهني" />
+          <AnimatedCounter target={2000} suffix="+" label="عميل ومؤسسة" />
+          <AnimatedCounter target={20} suffix="+" label="عاماً من الخبرة" />
+          <AnimatedCounter target={12} suffix="+" label="قطاعاً نخدمه" />
         </div>
       </div>
     </section>
@@ -1221,9 +1257,10 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <TrustPartnersSection />
+      <ReferenceMetricsSection />
       <ServicesSection />
       <RealCaseStudiesSection />
+      <TrustPartnersSection />
       <SectorsSection />
       <StatsSection />
       <AchievementsSection />
