@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Shield } from 'lucide-react';
+import { Button } from '../components/ui/Button';
 import {
   trackLeadSubmitted,
   trackLeadSuccess,
@@ -199,14 +200,16 @@ export default function BookConsultation() {
                           </button>
                         ))}
                       </div>
-                      <button
+                      <Button
                         type="button"
+                        variant="primary"
+                        size="lg"
+                        className="w-full"
                         onClick={() => formData.type && handleStepChange(1, 2)}
                         disabled={!formData.type}
-                        className="w-full bg-gold text-white py-4 rounded-xl font-bold text-lg disabled:opacity-50"
                       >
                         التالي
-                      </button>
+                      </Button>
                     </div>
                   )}
 
@@ -299,10 +302,19 @@ export default function BookConsultation() {
                         </p>
                       )}
                       <div className="flex gap-4 mt-8">
-                        <button type="button" onClick={() => handleStepChange(2, 1)} className="px-8 py-4 rounded-xl font-bold text-navy bg-gray-100">السابق</button>
-                        <button type="submit" disabled={isSubmitting} className="flex-1 bg-gold text-white py-4 rounded-xl font-bold text-lg disabled:opacity-60">
-                          {isSubmitting ? 'جارٍ الإرسال...' : 'تأكيد الحجز'}
-                        </button>
+                        <Button type="button" variant="secondary" size="lg" onClick={() => handleStepChange(2, 1)}>
+                          السابق
+                        </Button>
+                        <Button
+                          type="submit"
+                          variant="primary"
+                          size="lg"
+                          className="flex-1"
+                          loading={isSubmitting}
+                          loadingText="جارٍ الإرسال..."
+                        >
+                          تأكيد الحجز
+                        </Button>
                       </div>
                     </div>
                   )}
