@@ -57,7 +57,7 @@ test.describe("Widget — Rendering & Basic Interaction", () => {
   test("greeting screen shows quick question buttons", async ({ page }) => {
     await openWidget(page);
     // Should have at least 2 quick question buttons
-    const quickBtns = page.locator("button").filter({ hasText: /كيف|ما هي|كيفية|أريد/ });
+    const quickBtns = page.locator(SEL.quickQuestionBtn);
     const count = await quickBtns.count();
     expect(count).toBeGreaterThanOrEqual(2);
   });
@@ -66,7 +66,7 @@ test.describe("Widget — Rendering & Basic Interaction", () => {
     mockAiApi(page);
     mockLeadsApi(page);
     await openWidget(page);
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي|كيفية|أريد/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(1000);
@@ -108,7 +108,7 @@ test.describe("AI Conversation Flow", () => {
   });
 
   test("clicking quick question triggers AI response", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي|كيفية|أريد/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(3000);
@@ -116,7 +116,7 @@ test.describe("AI Conversation Flow", () => {
   });
 
   test("user can type a custom message", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(1000);
@@ -130,7 +130,7 @@ test.describe("AI Conversation Flow", () => {
   });
 
   test("send button exists after quick question click", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(1000);
@@ -143,21 +143,25 @@ test.describe("AI Conversation Flow", () => {
   });
 
   test("AI response contains Arabic text", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
-    if (await firstQuick.isVisible()) {
-      await firstQuick.click();
-      await page.waitForTimeout(3000);
-    }
-    // Check for any Arabic text in the chat area
-    const chatArea = page.locator("[class*='message'], [class*='bubble'], [class*='chat']").first();
-    if (await chatArea.isVisible()) {
-      const text = await chatArea.textContent();
-      expect(text).toBeTruthy();
-    }
+    // NOTE: this exercises the app's offline/demo fallback, not the mocked
+    // AI response. streamAIResponse() (src/lib/aiService.ts) only consumes
+    // a backend reply when the response's content-type is
+    // `text/event-stream`; mockAiApi()'s JSON body doesn't satisfy that, so
+    // the app always falls through to its local generateLegalResponse()
+    // knowledge base regardless of what the mock returns. For this quick
+    // question ("كيف أسس شركة في مصر؟") no keyword matches, so the reply is
+    // the generic fallback text ("شكراً لسؤالك...⚠️ ملاحظة مهمة...📞 للاستشارة
+    // الفورية..."). Confirmed by direct observation — see
+    // .scratch/0002-chatbot-lead-flow-fix.md.
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
+    await firstQuick.click();
+    const assistantBubble = page.locator(SEL.assistantBubble).last();
+    // Arabic Unicode block (U+0600–U+06FF)
+    await expect(assistantBubble).toContainText(/[؀-ۿ]/, { timeout: 8000 });
   });
 
   test("multiple messages can be sent in sequence", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(3000);
@@ -171,7 +175,7 @@ test.describe("AI Conversation Flow", () => {
   });
 
   test("conversation persists when scrolling", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(3000);
@@ -184,7 +188,7 @@ test.describe("AI Conversation Flow", () => {
   });
 
   test("new conversation button clears chat history", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(3000);
@@ -223,7 +227,7 @@ test.describe("Lead Capture Flow", () => {
   });
 
   test("lead prompt appears after first AI response", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -237,7 +241,7 @@ test.describe("Lead Capture Flow", () => {
   });
 
   test("clicking decline hides lead prompt", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -251,7 +255,7 @@ test.describe("Lead Capture Flow", () => {
   });
 
   test("clicking accept shows name and phone form", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -268,7 +272,7 @@ test.describe("Lead Capture Flow", () => {
   });
 
   test("submitting empty form shows validation error", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -290,7 +294,7 @@ test.describe("Lead Capture Flow", () => {
   });
 
   test("submitting with only name shows validation error", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -312,7 +316,7 @@ test.describe("Lead Capture Flow", () => {
   });
 
   test("valid submission shows success screen", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -338,7 +342,7 @@ test.describe("Lead Capture Flow", () => {
   });
 
   test("after submission, conversation can continue", async ({ page }) => {
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -401,7 +405,7 @@ test.describe("Error Handling", () => {
     await page.route('**/api/ai/ask', (route) =>
       route.fulfill({ status: 500, body: "Internal Server Error" })
     );
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -413,7 +417,7 @@ test.describe("Error Handling", () => {
 
   test("network failure does not crash the widget", async ({ page }) => {
     await page.route('**/api/ai/ask', (route) => route.abort("failed"));
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -428,7 +432,7 @@ test.describe("Error Handling", () => {
     await page.route('**/api/leads', (route) =>
       route.fulfill({ status: 500, body: "error" })
     );
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);
@@ -553,7 +557,7 @@ test.describe("Mobile Viewport (375px)", () => {
 
   test("full lead flow completes on mobile", async ({ page }) => {
     await openWidget(page);
-    const firstQuick = page.locator("button").filter({ hasText: /كيف|ما هي/ }).first();
+    const firstQuick = page.locator(SEL.quickQuestionBtn).first();
     if (await firstQuick.isVisible()) {
       await firstQuick.click();
       await page.waitForTimeout(4000);

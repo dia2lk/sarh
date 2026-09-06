@@ -335,11 +335,14 @@ export default function FloatingChatbot() {
                         <Bot size={14} className="text-gold" />
                       )}
                     </div>
-                    <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed message-bubble ${
-                      msg.role === 'user'
-                        ? 'bg-gold text-white rounded-br-md'
-                        : 'bg-[#1a2744] text-gray-200 rounded-bl-md border border-[#243352]'
-                    }`}>
+                    <div
+                      className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed message-bubble ${
+                        msg.role === 'user'
+                          ? 'bg-gold text-white rounded-br-md'
+                          : 'bg-[#1a2744] text-gray-200 rounded-bl-md border border-[#243352]'
+                      }`}
+                      data-testid={msg.role === 'assistant' ? 'assistant-message-bubble' : 'user-message-bubble'}
+                    >
                       {msg.content ? (
                         <div className="whitespace-pre-wrap">{msg.content}</div>
                       ) : (

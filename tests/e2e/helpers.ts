@@ -20,9 +20,17 @@ export const SEL = {
   panel:          '[class*="chatbot-panel"], [class*="w-[380px]"]',
 
   // Chat
-  quickQBtn:      'button:has-text("كيف أحمي")',
+  // Scoped to the real chatbot panel — see .scratch/0002-chatbot-lead-flow-fix.md
+  // for why the previous page-global `button:has-text(...)` / `[class*=...]`
+  // selectors below silently matched unrelated homepage elements (FAQ
+  // accordion, WhatsApp icon, case-selector tabs).
+  quickQuestionBtn: '[data-testid="chatbot-panel"] [data-testid="quick-question-button"]',
   inputArea:      'textarea[placeholder*="سؤالك"]',
   sendBtn:        'button[aria-label="إرسال"]',
+  assistantBubble: '[data-testid="chatbot-panel"] [data-testid="assistant-message-bubble"]',
+  // aiBubble/userBubble below are unused (kept for reference); they never
+  // matched real markup even before this fix — see
+  // .scratch/ISSUE-chatbot-e2e-neutered-assertions.md.
   aiBubble:       '[class*="ai-bubble"], [class*="bot-message"]',
   userBubble:     '[class*="user-bubble"], [class*="user-message"]',
   sourceBadge:    '[data-testid="source-badge"]',
@@ -31,7 +39,10 @@ export const SEL = {
   // Lead prompt
   leadPromptBanner: '[data-testid="lead-prompt"], [class*="lead-prompt"]',
   leadYesBtn:     'button:has-text("نعم"), button:has-text("تواصل")',
-  leadNoBtn:      'button:has-text("استمر"), button:has-text("لا")',
+  // Scoped to the real decline control (FloatingChatbot already exposes this
+  // testid) — the previous text-based selector matched a homepage "success
+  // stories" tab whose label happens to contain "لا" as a substring.
+  leadNoBtn:      '[data-testid="chatbot-panel"] [data-testid="lead-decline-button"]',
 
   // Lead form
   leadForm:       '[data-testid="lead-form"], form',
