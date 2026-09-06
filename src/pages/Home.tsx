@@ -171,6 +171,31 @@ function ReferenceMetricsSection() {
             );
           })}
         </div>
+        <div className="mt-8 grid gap-6 border-t border-gray-200 pt-8 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
+          <div>
+            <h3 className="mb-2 text-lg font-black text-navy">كيف نقرأ الأرقام؟</h3>
+            <p className="max-w-3xl text-sm leading-7 text-gray-text">
+              يشمل العدد التراكمي أعمال التأسيس، ومراجعات العقود، والملفات الضريبية، والتمثيل القانوني. وقد يتلقى العميل أكثر من خدمة ضمن نطاق تعاون واحد.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm font-bold text-navy">
+            <Link to="/cases" className="border-b border-gold pb-1 hover:text-gold">اطّلع على نماذج من الأعمال ←</Link>
+            <Link to="/services" className="border-b border-gold pb-1 hover:text-gold">استعرض خدماتنا ←</Link>
+          </div>
+        </div>
+        <div className="mt-8 grid gap-px overflow-hidden border border-gray-200 bg-gray-200 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            ['+800 شركة مؤسسة', 'تأسيس الشركات وحوكمة الأعمال'],
+            ['+3,000 عقد مراجع', 'صياغة ومراجعة العقود الاستراتيجية'],
+            ['+1,200 عميل ضريبي', 'الاستشارات الضريبية والمحاسبية'],
+            ['+500 قضية اقتصادية', 'التمثيل القانوني في القضايا المعقدة'],
+          ].map(([value, label]) => (
+            <div key={label} className="bg-[#fcfaf5] px-5 py-4">
+              <p className="text-base font-black text-navy">{value}</p>
+              <p className="mt-1 text-xs font-semibold text-gray-text">{label}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -1252,23 +1277,26 @@ function AIConsultationCTA() {
   );
 }
 
+// Optional homepage blocks retained for future campaign pages.  They are
+// intentionally not included in the reference landing-page sequence below.
+void StatsSection;
+void QuickContactSection;
+void AIConsultationCTA;
+
 // ===== MAIN HOME PAGE =====
 export default function Home() {
   return (
     <>
       <HeroSection />
       <ReferenceMetricsSection />
+      <TrustPartnersSection />
       <ServicesSection />
       <RealCaseStudiesSection />
-      <TrustPartnersSection />
       <SectorsSection />
-      <StatsSection />
       <AchievementsSection />
       <WhySarhSection />
       <FAQSection />
-      <AIConsultationCTA />
       <BranchesSection />
-      <QuickContactSection />
     </>
   );
 }
