@@ -2,9 +2,10 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Search, Filter, ChevronDown, ChevronUp, RefreshCw, Users, Phone,
-  CheckCircle2, AlertCircle, Clock, TrendingUp, BarChart3, LogIn,
-  Shield, Eye, ArrowUpDown, CreditCard, Bell, X
+  CheckCircle2, AlertCircle, Clock, TrendingUp, BarChart3,
+  Eye, ArrowUpDown, CreditCard, Bell, X
 } from 'lucide-react';
+import { clearStaffSession, getStaffSession } from '../lib/staffAuth';
 import LeadDetailModal from '../components/LeadDetailModal';
 import {
   subscribeToNotifications,
@@ -50,174 +51,8 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
   lost: { label: 'مفقود', color: 'text-red-700', bg: 'bg-red-100' },
 };
 
-// ---- Demo Data ----
-const DEMO_LEADS: Lead[] = [
-  {
-    id: '1', form_name: 'booking_consultation', service_type: 'corporate',
-    consultation_type: 'تأسيس الشركات وحوكمة الأعمال',
-    name: 'أحمد محمد العمري', phone: '01098765432', email: 'ahmed@company.com',
-    preferred_date: '2025-02-15', preferred_time: 'morning',
-    description: 'أرغب في تأسيس شركة مساهمة برأس مال 5 مليون جنيه',
-    utm_source: 'facebook', utm_medium: 'cpc', utm_campaign: 'corporate_launch',
-    status: 'new', assigned_to: '', notes: '',
-    created_at: '2025-01-20T10:30:00Z', updated_at: '2025-01-20T10:30:00Z',
-    summary: 'كيف أحمي شركتي من المخاطر القانونية؟', source: 'chatbot_widget',
-  },
-  {
-    id: '2', form_name: 'contact_form', service_type: 'tax',
-    consultation_type: 'الاستشارات الضريبية والمحاسبية',
-    name: 'سارة علي المنصور', phone: '01155443322', email: 'sara@gmail.com',
-    preferred_date: '2025-02-18', preferred_time: 'afternoon',
-    description: 'نحتاج مراجعة ضريبية شاملة لشركتنا',
-    utm_source: 'google', utm_medium: 'organic', utm_campaign: '',
-    status: 'contacted', assigned_to: 'د. إسلام', notes: 'تم التواصل — يحتاج موعد الأسبوع القادم',
-    created_at: '2025-01-19T14:20:00Z', updated_at: '2025-01-20T09:00:00Z',
-  },
-  {
-    id: '3', form_name: 'booking_consultation', service_type: 'criminal',
-    consultation_type: 'التمثيل القانوني في القضايا المعقدة',
-    name: 'خالد عبد الرحمن', phone: '01234567890', email: '',
-    preferred_date: '', preferred_time: '',
-    description: 'قضية تجارية معقدة تتطلب تمثيل قانوني متخصص',
-    utm_source: 'whatsapp', utm_medium: 'referral', utm_campaign: '',
-    status: 'converted', assigned_to: 'د. إسلام', notes: 'تم توقيع العقد — أتعاب 50,000 جنيه',
-    created_at: '2025-01-15T08:45:00Z', updated_at: '2025-01-18T16:30:00Z',
-  },
-  {
-    id: '4', form_name: 'chatbot_widget', service_type: 'contracts',
-    consultation_type: 'صياغة ومراجعة العقود الاستراتيجية',
-    name: 'فاطمة الزهراء أحمد', phone: '01099887766', email: 'fatma@corp.com',
-    preferred_date: '2025-02-20', preferred_time: 'evening',
-    description: 'مراجعة عقد شراكة دولي بقيمة 500 مليون ريال',
-    utm_source: 'linkedin', utm_medium: 'social', utm_campaign: 'b2b_contracts',
-    status: 'new', assigned_to: '', notes: '',
-    created_at: '2025-01-21T11:00:00Z', updated_at: '2025-01-21T11:00:00Z',
-    summary: 'ما هي بنود العقد التي يجب الانتباه لها؟', source: 'chatbot_widget',
-  },
-  {
-    id: '5', form_name: 'booking_consultation', service_type: 'corporate',
-    consultation_type: 'تأسيس الشركات وحوكمة الأعمال',
-    name: 'محمد إبراهيم السيد', phone: '01122334455', email: 'mohamed@startup.co',
-    preferred_date: '2025-02-22', preferred_time: 'morning',
-    description: 'تأسيس شركة تقنية ناشئة مع حماية الملكية الفكرية',
-    utm_source: 'facebook', utm_medium: 'cpc', utm_campaign: 'startup_q1',
-    status: 'contacted', assigned_to: 'فريق الشركات', notes: 'مهتم بحزمة التأسيس الشاملة',
-    created_at: '2025-01-18T16:00:00Z', updated_at: '2025-01-19T10:00:00Z',
-  },
-  {
-    id: '6', form_name: 'contact_form', service_type: 'consultation',
-    consultation_type: 'استشارة قانونية عامة',
-    name: 'نورهان عادل', phone: '01066554433', email: '',
-    preferred_date: '', preferred_time: '',
-    description: 'استشارة حول قانون الإيجار الجديد',
-    utm_source: 'direct', utm_medium: 'direct', utm_campaign: '',
-    status: 'lost', assigned_to: '', notes: 'لم يرد على الاتصال — متابعة بعد أسبوع',
-    created_at: '2025-01-10T09:30:00Z', updated_at: '2025-01-14T14:00:00Z',
-  },
-  {
-    id: '7', form_name: 'booking_consultation', service_type: 'tax',
-    consultation_type: 'الاستشارات الضريبية والمحاسبية',
-    name: 'عمرو حسام الدين', phone: '01287766554', email: 'amr@foods.com',
-    preferred_date: '2025-02-25', preferred_time: 'afternoon',
-    description: 'ضبط الالتزامات الضريبية لمصنع أغذية — الفاتورة الإلكترونية',
-    utm_source: 'referral', utm_medium: 'word_of_mouth', utm_campaign: '',
-    status: 'new', assigned_to: '', notes: '',
-    created_at: '2025-01-22T08:15:00Z', updated_at: '2025-01-22T08:15:00Z',
-  },
-  {
-    id: '8', form_name: 'chatbot_widget', service_type: 'criminal',
-    consultation_type: 'التمثيل القانوني في القضايا المعقدة',
-    name: 'ياسمين عبد الله', phone: '01144556677', email: 'yasmine@legal.com',
-    preferred_date: '', preferred_time: '',
-    description: 'قضية تزوير تجاري — تحتاج استشارة عاجلة',
-    utm_source: 'google', utm_medium: 'organic', utm_campaign: '',
-    status: 'new', assigned_to: '', notes: '',
-    created_at: '2025-01-22T13:45:00Z', updated_at: '2025-01-22T13:45:00Z',
-    summary: 'ما هي خطوات الدفاع في قضية تزوير؟', source: 'chatbot_widget',
-  },
-];
-
-// ---- Login Component ----
-function LoginForm({ onLogin }: { onLogin: () => void }) {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    // ⚠️ Client-side gate only (demo). Real authorization MUST be enforced
-    // server-side (Supabase Auth + RLS) — see security roadmap.
-    const accessCode = import.meta.env.VITE_CRM_ACCESS_CODE || 'sarh2025';
-    setTimeout(() => {
-      if (password === accessCode) {
-        sessionStorage.setItem('sarh_crm_auth', 'true');
-        onLogin();
-      } else {
-        setError('كلمة المرور غير صحيحة');
-      }
-      setLoading(false);
-    }, 800);
-  };
-
-  return (
-    <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-6" dir="rtl">
-      <div className="bg-white rounded-2xl shadow-2xl p-10 max-w-md w-full">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#0f172a] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Shield size={28} className="text-[#c29a56]" />
-          </div>
-          <h1 className="text-2xl font-black text-[#0f172a] mb-2">لوحة تحكم صرح</h1>
-          <p className="text-gray-400 text-sm">إدارة العملاء المحتملين والمتابعة</p>
-        </div>
-
-        <form id="crm-login" onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="text-sm font-bold text-[#0f172a] mb-2 block">كلمة المرور</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => { setPassword(e.target.value); setError(''); }}
-              className="w-full px-5 py-3.5 border border-gray-200 rounded-xl text-left focus:ring-2 focus:ring-[#c29a56] focus:border-[#c29a56] outline-none"
-              placeholder="••••••••"
-              dir="ltr"
-            />
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-          </div>
-          <button
-            type="submit"
-            disabled={loading || !password}
-            className="w-full bg-[#c29a56] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#a88340] transition-colors disabled:opacity-50"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <RefreshCw size={18} className="animate-spin" />
-                جارٍ التحقق...
-              </span>
-            ) : (
-              <span className="flex items-center justify-center gap-2">
-                <LogIn size={18} />
-                تسجيل الدخول
-              </span>
-            )}
-          </button>
-        </form>
-
-        <p className="text-center text-gray-400 text-xs mt-6">
-          هذه اللوحة مخصصة لفريق صرح فقط
-        </p>
-        <Link to="/billing" className="mt-4 block text-center text-sm text-[#c29a56] hover:text-[#a88340] font-bold">
-          <CreditCard size={16} className="inline ml-1" /> الدخول لنظام الفوترة والتحصيل ←
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 // ---- Main Dashboard ----
 export default function LawyerCRM() {
-  const [isAuth, setIsAuth] = useState(() => sessionStorage.getItem('sarh_crm_auth') === 'true');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -233,21 +68,20 @@ export default function LawyerCRM() {
 
   // Load leads
   useEffect(() => {
-    if (!isAuth) return;
-
     const fetchLeads = async () => {
       setLoading(true);
       try {
         const supabaseUrl = (window as any).__SUPABASE_URL__ || import.meta.env.VITE_SUPABASE_URL;
-        const supabaseKey = (window as any).__SUPABASE_KEY__ || import.meta.env.VITE_SUPABASE_ANON_KEY;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        const session = getStaffSession();
 
-        if (supabaseUrl && supabaseKey) {
+        if (supabaseUrl && supabaseKey && session) {
           const response = await fetch(
             `${supabaseUrl}/rest/v1/leads?select=*&order=created_at.desc&limit=100`,
             {
               headers: {
                 'apikey': supabaseKey,
-                'Authorization': `Bearer ${supabaseKey}`,
+                'Authorization': `Bearer ${session.accessToken}`,
               },
             }
           );
@@ -264,19 +98,15 @@ export default function LawyerCRM() {
         console.log('Using demo data:', err);
       }
 
-      // Fallback to demo data
-      setTimeout(() => {
-        setLeads(DEMO_LEADS);
-        setLoading(false);
-      }, 1000);
+      setLeads([]);
+      setLoading(false);
     };
 
     fetchLeads();
-  }, [isAuth]);
+  }, []);
 
   // Notifications
   useEffect(() => {
-    if (!isAuth) return;
     generateDemoNotifications();
     setNotifications(getNotificationHistory());
     setUnreadCount(getUnreadCount());
@@ -288,7 +118,7 @@ export default function LawyerCRM() {
     });
 
     return unsubscribe;
-  }, [isAuth]);
+  }, []);
 
   // Close notif panel on outside click
   useEffect(() => {
@@ -377,14 +207,15 @@ export default function LawyerCRM() {
 
     // Try to persist to Supabase
     try {
-      const supabaseUrl = (window as any).__SUPABASE_URL__;
-      const supabaseKey = (window as any).__SUPABASE_KEY__;
-      if (supabaseUrl && supabaseKey) {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const session = getStaffSession();
+      if (supabaseUrl && supabaseKey && session) {
         await fetch(`${supabaseUrl}/rest/v1/leads?id=eq.${id}`, {
           method: 'PATCH',
           headers: {
             'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
+            'Authorization': `Bearer ${session.accessToken}`,
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal',
           },
@@ -408,16 +239,8 @@ export default function LawyerCRM() {
   };
 
   const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLeads(DEMO_LEADS);
-      setLoading(false);
-    }, 800);
+    window.location.reload();
   };
-
-  if (!isAuth) {
-    return <LoginForm onLogin={() => setIsAuth(true)} />;
-  }
 
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
@@ -503,7 +326,7 @@ export default function LawyerCRM() {
               <RefreshCw size={16} />
             </button>
             <button
-              onClick={() => { sessionStorage.removeItem('sarh_crm_auth'); setIsAuth(false); }}
+              onClick={() => { clearStaffSession(); window.location.reload(); }}
               className="text-xs text-gray-400 hover:text-white transition-colors"
             >
               خروج

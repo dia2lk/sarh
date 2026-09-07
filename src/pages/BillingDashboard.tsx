@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  CreditCard, DollarSign, CheckCircle2, Clock, AlertTriangle,
+  DollarSign, CheckCircle2, Clock, AlertTriangle,
   Search, Eye, Send, ArrowUpDown,
   Receipt, Plus, Copy, ExternalLink
 } from 'lucide-react';
@@ -89,9 +89,6 @@ const DEMO_INVOICES: Invoice[] = [
 ];
 
 export default function BillingDashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem('sarh_crm_auth') === 'true');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
   const [invoices] = useState<Invoice[]>(DEMO_INVOICES);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -143,17 +140,6 @@ export default function BillingDashboard() {
     else { setSortField(field); setSortDir('desc'); }
   };
 
-  const handleLogin = () => {
-    // ⚠️ Client-side gate only (demo). Real authorization MUST be enforced
-    // server-side (Supabase Auth + RLS) — see security roadmap.
-    const accessCode = import.meta.env.VITE_CRM_ACCESS_CODE || 'sarh2025';
-    if (password === accessCode) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('sarh_crm_auth', 'true');
-      setLoginError('');
-    } else setLoginError('كلمة المرور غير صحيحة');
-  };
-
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard?.writeText(text);
     setCopiedId(id);
@@ -162,28 +148,6 @@ export default function BillingDashboard() {
 
   const formatDate = (d: string) => new Date(d).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' });
   const formatAmount = (a: number) => a.toLocaleString('ar-EG');
-
-  // ---- Login Screen ----
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center" dir="rtl">
-        <div className="bg-white rounded-3xl p-10 max-w-md w-full mx-4 shadow-2xl">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-[#0f172a] rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <CreditCard className="text-[#c29a56]" size={32} />
-            </div>
-            <h1 className="text-2xl font-black text-[#0f172a]">نظام الفوترة</h1>
-            <p className="text-gray-500 text-sm mt-2">صرح للخدمات القانونية والمحاسبية</p>
-          </div>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleLogin()}
-            placeholder="كلمة المرور" className="w-full px-5 py-3.5 border border-gray-200 rounded-xl text-right mb-4" />
-          {loginError && <p className="text-red-500 text-sm mb-3 text-right">{loginError}</p>}
-          <button onClick={handleLogin} className="w-full bg-[#c29a56] text-white py-3.5 rounded-xl font-bold hover:bg-[#a88340] transition-colors">دخول</button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>

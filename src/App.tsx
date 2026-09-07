@@ -5,6 +5,7 @@ import Footer from './components/Footer.tsx';
 import WhatsAppButton from './components/WhatsAppButton.tsx';
 import FloatingChatbot from './components/FloatingChatbot.tsx';
 import Seo from './components/Seo.tsx';
+import StaffGate from './components/StaffGate.tsx';
 
 const Home = lazy(() => import('./pages/Home.tsx'));
 const About = lazy(() => import('./pages/About.tsx'));
@@ -128,8 +129,8 @@ function AppLayout() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/book-consultation" element={<BookConsultation />} />
               <Route path="/ai-consultation" element={<AIConsultation />} />
-              <Route path="/crm" element={<LawyerCRM />} />
-              <Route path="/billing" element={<BillingDashboard />} />
+              <Route path="/crm" element={<StaffGate><LawyerCRM /></StaffGate>} />
+              <Route path="/billing" element={<StaffGate><BillingDashboard /></StaffGate>} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />
