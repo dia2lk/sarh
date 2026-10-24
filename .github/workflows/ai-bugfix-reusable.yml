@@ -1,0 +1,332 @@
+name: Reusable AI bug-fix factory
+
+on:
+  workflow_call:
+    inputs:
+      setup-command:
+        description: Trusted repository setup command(s), run before validation.
+        required: false
+        type: string
+        default: npm ci
+      validation-command:
+        description: Trusted repository checks that must pass before a PR is opened.
+        required: false
+        type: string
+        default: npm run build
+    secrets:
+      OPENAI_API_KEY:
+        description: OpenAI API key used by the Codex GitHub Action.
+        required: true
+
+concurrency:
+  group: ai-bugfix-${{ github.repository }}-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  propose-fix:
+    if: >-
+      github.event.issue.pull_request == null &&
+      github.event.comment.body == '/ai-fix' &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      issues: read
+    outputs:
+      base_sha: ${{ steps.meta.outputs.base_sha }}
+    steps:
+      - name: Check out the triggering default-branch commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Record base commit and prepare issue context
+        id: meta
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: |
+          set -euo pipefail
+          echo "base_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          mkdir -p .github/codex
+          printf '%s\n' '.github/codex/issue.json' >> .git/info/exclude
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          title = (os.environ.get("ISSUE_TITLE") or "")[:300]
+          body = os.environ.get("ISSUE_BODY") or ""
+          # Remove visually hidden HTML comments before the report is shown to the agent.
+          body = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)[:20000]
+          issue = {
+              "url": os.environ.get("ISSUE_URL", ""),
+              "title": title,
+              "body": body,
+          }
+          Path(".github/codex/issue.json").write_text(
+              json.dumps(issue, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Configure the restricted Codex profile
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ai-fix-codex-home"
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          workspace = Path(os.environ["GITHUB_WORKSPACE"])
+          command_files = Path(os.environ["GITHUB_ENV"]).parent
+          rules = {
+              command_files: "deny",
+              workspace / ".git" / "config": "read",
+              workspace / ".git" / "hooks": "deny",
+              workspace / ".git" / "info" / "exclude": "read",
+          }
+          lines = [
+              'default_permissions = "ai_fix"',
+              "",
+              "[permissions.ai_fix]",
+              'description = "Workspace edits with runner command files and Git hooks protected."',
+              'extends = ":workspace"',
+              "",
+              "[permissions.ai_fix.network]",
+              "enabled = false",
+              "",
+              "[permissions.ai_fix.filesystem]",
+          ]
+          lines.extend(f"{json.dumps(str(path))} = {json.dumps(access)}" for path, access in rules.items())
+          config = Path(os.environ["RUNNER_TEMP"]) / "ai-fix-codex-home" / "config.toml"
+          config.write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+
+      - name: Run Codex to propose a focused fix
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/issue-fix.md
+          codex-home: ${{ runner.temp }}/ai-fix-codex-home
+          permission-profile: "ai_fix"
+          safety-strategy: drop-sudo
+
+      # This job has read-only GitHub permissions and no checkout credentials or
+      # application secrets. The OpenAI key is supplied only to the Codex action;
+      # post-agent steps collect and upload an inert patch for a fresh validation job.
+      - name: Export the proposed diff
+        shell: bash
+        env:
+          BASE_SHA: ${{ steps.meta.outputs.base_sha }}
+          GIT_CONFIG_NOSYSTEM: "1"
+          GIT_CONFIG_GLOBAL: /dev/null
+          GIT_PAGER: cat
+        run: |
+          set -euo pipefail
+          rm -f .github/codex/issue.json
+          git -c core.hooksPath=/dev/null read-tree "$BASE_SHA"
+          git -c core.hooksPath=/dev/null add -N --all
+          git -c core.hooksPath=/dev/null diff --binary --no-renames --no-ext-diff --no-textconv --no-color "$BASE_SHA" -- . > "$RUNNER_TEMP/ai-fix.patch"
+          if [[ ! -s "$RUNNER_TEMP/ai-fix.patch" ]]; then
+            echo "Codex did not produce a change." >&2
+            exit 1
+          fi
+
+      - name: Upload proposed diff
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-fix-patch-${{ github.run_id }}
+          path: ${{ runner.temp }}/ai-fix.patch
+          if-no-files-found: error
+          retention-days: 2
+
+  validate-fix:
+    needs: propose-fix
+    if: needs.propose-fix.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the exact base commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.propose-fix.outputs.base_sha }}
+          persist-credentials: false
+
+      - name: Download proposed diff
+        uses: actions/download-artifact@v4
+        with:
+          name: ai-fix-patch-${{ github.run_id }}
+          path: ${{ runner.temp }}/ai-fix
+
+      - name: Check patch scope and apply it
+        env:
+          PATCH_FILE: ${{ runner.temp }}/ai-fix/ai-fix.patch
+        run: |
+          python3 - <<'PY'
+          import os
+          import subprocess
+          import sys
+
+          patch = os.environ["PATCH_FILE"]
+          listing = subprocess.run(
+              ["git", "apply", "--numstat", "-z", patch],
+              check=True,
+              capture_output=True,
+          ).stdout
+          paths = []
+          records = listing.split(b"\0")
+          if records and records[-1] == b"":
+              records.pop()
+          for record in records:
+              columns = record.split(b"\t", 2)
+              if len(columns) != 3 or not columns[2]:
+                  raise SystemExit("Could not safely read a changed path from the patch.")
+              paths.append(os.fsdecode(columns[2]))
+
+          def allowed(path: str) -> bool:
+              return (
+                  path.startswith(("src/", "tests/", "public/"))
+                  or ("/" not in path and path.endswith(".md"))
+              )
+
+          rejected = [path for path in paths if not allowed(path)]
+          if not paths:
+              raise SystemExit("The proposed patch is empty.")
+          if rejected:
+              print("Patch contains files outside the permitted bug-fix scope:", file=sys.stderr)
+              for path in rejected:
+                  print(f"  - {path}", file=sys.stderr)
+              raise SystemExit(1)
+
+          subprocess.run(["git", "apply", "--check", patch], check=True)
+          subprocess.run(["git", "apply", patch], check=True)
+          subprocess.run(["git", "add", "-N", "--all"], check=True)
+          changed = subprocess.check_output(["git", "diff", "--name-only", "-z", "HEAD"])
+          actual_paths = [os.fsdecode(path) for path in changed.split(b"\0") if path]
+          if sorted(paths) != sorted(actual_paths):
+              raise SystemExit("Applied file paths do not match the paths in the proposed patch.")
+          rejected = [path for path in actual_paths if not allowed(path)]
+          if rejected:
+              raise SystemExit("An applied file is outside the permitted bug-fix scope.")
+          print("Applied candidate patch to a clean checkout.")
+          PY
+
+      - name: Install project and browser dependencies
+        env:
+          SETUP_COMMAND: ${{ inputs.setup-command }}
+        run: bash -euo pipefail -c "$SETUP_COMMAND"
+
+      - name: Run required checks
+        env:
+          VALIDATION_COMMAND: ${{ inputs.validation-command }}
+        run: bash -euo pipefail -c "$VALIDATION_COMMAND"
+
+  open-review-pr:
+    needs: [propose-fix, validate-fix]
+    if: needs.validate-fix.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Check out the base commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.propose-fix.outputs.base_sha }}
+          persist-credentials: false
+
+      - name: Download proposed diff
+        uses: actions/download-artifact@v4
+        with:
+          name: ai-fix-patch-${{ github.run_id }}
+          path: ${{ runner.temp }}/ai-fix
+
+      - name: Re-check patch scope and apply it
+        env:
+          PATCH_FILE: ${{ runner.temp }}/ai-fix/ai-fix.patch
+        run: |
+          python3 - <<'PY'
+          import os
+          import subprocess
+          import sys
+
+          patch = os.environ["PATCH_FILE"]
+          listing = subprocess.run(
+              ["git", "apply", "--numstat", "-z", patch],
+              check=True,
+              capture_output=True,
+          ).stdout
+          paths = []
+          records = listing.split(b"\0")
+          if records and records[-1] == b"":
+              records.pop()
+          for record in records:
+              columns = record.split(b"\t", 2)
+              if len(columns) != 3 or not columns[2]:
+                  raise SystemExit("Could not safely read a changed path from the patch.")
+              paths.append(os.fsdecode(columns[2]))
+          rejected = [
+              path for path in paths
+              if not (
+                  path.startswith(("src/", "tests/", "public/"))
+                  or ("/" not in path and path.endswith(".md"))
+              )
+          ]
+          if not paths or rejected:
+              print("Refusing an empty or out-of-scope patch.", file=sys.stderr)
+              for path in rejected:
+                  print(f"  - {path}", file=sys.stderr)
+              raise SystemExit(1)
+          subprocess.run(["git", "apply", "--check", patch], check=True)
+          subprocess.run(["git", "apply", patch], check=True)
+          subprocess.run(["git", "add", "-N", "--all"], check=True)
+          changed = subprocess.check_output(["git", "diff", "--name-only", "-z", "HEAD"])
+          actual_paths = [os.fsdecode(path) for path in changed.split(b"\0") if path]
+          if sorted(paths) != sorted(actual_paths):
+              raise SystemExit("Applied file paths do not match the paths in the proposed patch.")
+          if any(not (path.startswith(("src/", "tests/", "public/")) or ("/" not in path and path.endswith(".md"))) for path in actual_paths):
+              raise SystemExit("An applied file is outside the permitted bug-fix scope.")
+          PY
+
+      - name: Create or update the human-review pull request
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ github.token }}
+          branch: ai-fix/issue-${{ github.event.issue.number }}
+          base: ${{ github.event.repository.default_branch }}
+          delete-branch: true
+          commit-message: "fix: propose AI-assisted issue #${{ github.event.issue.number }} fix"
+          title: "fix: proposed fix for issue #${{ github.event.issue.number }}"
+          body: |
+            This candidate was generated from issue #${{ github.event.issue.number }} after a trusted maintainer requested `/ai-fix`.
+
+            The candidate passed the configured setup and validation commands in the workflow before this PR was opened. Please review the diff and CI results; this workflow does not merge or deploy.
+
+            Source issue: ${{ github.event.issue.html_url }}
+          draft: false
+
+      - name: Link the pull request on the source issue
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: actions/github-script@v7
+        env:
+          PULL_REQUEST_URL: ${{ steps.cpr.outputs.pull-request-url }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `AI fix candidate is ready for human review: ${process.env.PULL_REQUEST_URL}\n\nThe workflow ran the configured checks before opening it. Nothing was merged or deployed.`,
+            });
